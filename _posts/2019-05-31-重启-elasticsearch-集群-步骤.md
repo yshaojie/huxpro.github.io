@@ -44,7 +44,7 @@ curl -X PUT "localhost:9200/_cluster/settings" -H 'Content-Type: application/jso
 ```
 #### 6.持续观察重启的节点,数据恢复情况,直到集群为green状态
 ```
-curl -X GET "localhost:9200/_cat/health"
+curl -X GET "localhost:9200/_cat/health?v"
 curl -X GET "localhost:9200/_cat/recovery"
 ```
 #### 7.Restart machine learning jobs.
