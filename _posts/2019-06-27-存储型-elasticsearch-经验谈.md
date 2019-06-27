@@ -1,6 +1,6 @@
 ---
 layout:     post
-title:      "重启elasticsearch集群步骤"
+title:      "存储型elasticsearch经验谈"
 date:       2019-06-27 17:03:00
 author:     "聼雨夜"
 catalog: true
