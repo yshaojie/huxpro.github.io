@@ -23,14 +23,14 @@ tags:
 * primaries - 只对主分片进行rebalance
 * replicas - 只对副本分片进行rebalance
 * none - 不进行rebalance
-```
+
 增加或者删除集群节点时,elasticsearch为了让各个节点上的分片数尽可能的均衡,<br/>
 默认会进行分片的rebalance,rebalance后,大家的分片数差不多就一样了,这样才能更充分的利用<br/>
-机器资源,但是存储型elasticsearch集群上边存储了大量的日志,如果进行rebalance,那么rebalance期间会有
-大量的数据从硬盘->网络->索引->硬盘走一遍,最终结果就会导致整个集群负载特别高.
-这种情况下,适合关闭rebalance,如有需要手动进行rebalance就可以了.
-建议值:none
-```
+机器资源,但是存储型elasticsearch集群上边存储了大量的日志,如果进行rebalance,那么rebalance期间会有<br/>
+大量的数据从硬盘->网络->索引->硬盘走一遍,最终结果就会导致整个集群负载特别高.<br/>
+这种情况下,适合关闭rebalance,如有需要手动进行rebalance就可以了.<br/>
+建议值:none<br/>
+
 
 #### Shard balancing heuristics
 ##### cluster.routing.allocation.balance.shard
