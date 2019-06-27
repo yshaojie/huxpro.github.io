@@ -14,7 +14,7 @@ tags:
 * false(default) - 不进行分片在同一机器上检查
 * true - 进行分片在同一机器上检查,保证一个分片(主+副本)不在同一机器上,这样就算机器挂掉,也能保证有可用的分片
 该设置是开启检查是否允许索引的一个分片在同一台机器上,默认值为false
-如果存在一个机器上部署了多个实例,建议开启检查,即:true
+**如果存在一个机器上部署了多个实例,建议开启检查,即:true**
 
 #### Shard rebalancing settings
 ##### cluster.routing.rebalance.enable
@@ -28,7 +28,7 @@ tags:
 机器资源,但是存储型elasticsearch集群上边存储了大量的日志,如果进行rebalance,那么rebalance期间会有
 大量的数据从硬盘->网络->索引->硬盘走一遍,最终结果就会导致整个集群负载特别高.
 这种情况下,适合关闭rebalance,如有需要手动进行rebalance就可以了.
-建议值:none
+**建议值:none**
 
 
 #### Shard balancing heuristics
@@ -38,10 +38,10 @@ tags:
 
 值越大,当有需要创建新的分片时,elasticsearch集群会优先让整个集群的每个节点分片数量更均衡
 也就是说,如果集群中有个节点分片数很少,那么创建新分片时,会给该节点多分配分片,来尽快的让整个集群达到
-分片数量平衡.
-例如以下场景:
-cluster.routing.allocation.balance.shard:0.45(默认值)
-cluster.routing.rebalance.enable:none,即集群不进行分片的rebalance
+分片数量平衡.<br/>
+例如以下场景:<br/>
+`cluster.routing.allocation.balance.shard:0.45(默认值)`
+`cluster.routing.rebalance.enable:none`,即集群不进行分片的rebalance
 现在加入一个新节点,当有新的索引创建时,该索引的所有主分片都会创建在新的节点上,
 最终导致新节点负载很高,甚至索引数据产生大量的延迟
 
@@ -57,4 +57,4 @@ cluster.routing.rebalance.enable:none,即集群不进行分片的rebalance
 * 1m(defaul) - 一个分片变为unassigned,如果过了一分钟还处于unassigned状态,则开始对其进行分配
 
 该值主要用于集群中一个节点脱离集群(节点挂了),然后重启,开始恢复它自己的副本
-如果节点启动太慢,可以适当的增大index.unassigned.node_left.delayed_timeout,保证不会超过delayed_timeout时间
+如果节点启动太慢,可以适当的增大`index.unassigned.node_left.delayed_timeout`,保证不会超过delayed_timeout时间
