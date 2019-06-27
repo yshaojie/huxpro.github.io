@@ -6,7 +6,7 @@ author:     "聼雨夜"
 catalog: true
 tags:
     - elasticsearch
-    -ELK
+    - ELK
     - 搜索引擎
 ---
 #### Shard allocation settings
