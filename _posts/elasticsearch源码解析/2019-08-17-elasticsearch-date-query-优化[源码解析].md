@@ -11,7 +11,7 @@ tags:
 ---
 ### 概述
 设想一种场景,有一个时间戳属性**timestamp**,该属性值索引的最大值和最小值为
-**max_timestamp**和**min_timestamp**,而查询范围值为**to<min_timestamp或from>max_timestamp**
+**max_timestamp**和**min_timestamp**,而查询范围值为**to小于min_timestamp或from大于max_timestamp**
 这种情况下,其实是不用进行查询的,因为肯定没有文档能匹配上,对这个查询直接范围无结果即可,这样就提高了查询效率
 和减少资源消耗
 ### 调用流程
@@ -27,6 +27,7 @@ tags:
 >来对搜索条件进行重写
 
 #### org.elasticsearch.index.query.AbstractQueryBuilder#rewrite
+
 ```java
 @Override
 public final QueryBuilder rewrite(QueryRewriteContext queryShardContext) throws IOException {
@@ -46,6 +47,7 @@ public final QueryBuilder rewrite(QueryRewriteContext queryShardContext) throws 
 ```
 
 #### org.elasticsearch.index.query.RangeQueryBuilder#doRewrite
+
 ```java
 @Override
 protected QueryBuilder doRewrite(QueryRewriteContext queryRewriteContext) throws IOException {
@@ -79,12 +81,14 @@ protected QueryBuilder doRewrite(QueryRewriteContext queryRewriteContext) throws
     }
 }
 ```
+
 * (1) 获取搜索值和属性的关系,**org.elasticsearch.index.mapper.MappedFieldType.Relation**
 * (2) 不相交,即搜索值范围不在实际值范围,则rewrite为MatchNoneQueryBuilder,即没有匹配上任何文档的query
 * (3) 包含情况下,该索引所有文档都能匹配上,那么设置**from和to**都为null,省去匹配的消耗
 
 #### org.elasticsearch.index.query.RangeQueryBuilder#getRelation
 * > 获取搜索值和属性的关系,**org.elasticsearch.index.mapper.MappedFieldType.Relation**
+
 ```java
 /**
  * An enum used to describe the relation between the range of terms in a
