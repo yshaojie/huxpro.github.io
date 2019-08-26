@@ -39,7 +39,16 @@ tags:
 不超过**indices.recovery.max_bytes_per_sec**,可以调整该值来提升索引恢复的速度,如果磁盘压力大(例如:日志系统,恢复的同时,也存在大量的索引任务),
 建议降低该值
 
+##### cluster.routing.allocation.node_concurrent_recoveries
+在一个节点上,同时参与索引恢复的分片数量,该参数是**cluster.routing.allocation.node_concurrent_outgoing_recoveries**和
+**cluster.routing.allocation.node_concurrent_incoming_recoveries**的合体,调整该值可以控制分片恢复速度
+
 ##### indices.recovery.max_concurrent_file_chunks
 恢复索引时,每次恢复并行发送的文件块请求数,如果数据恢复时,实际恢复流量速度没有达到**indices.recovery.max_bytes_per_sec**,
 则可以增加该值来提升索引恢复速度
+
+#### cluster.routing.allocation.cluster_concurrent_rebalance
+Allow to control how many concurrent shard rebalances are allowed cluster wide. Defaults to 2. 
+Note that this setting only controls the number of concurrent shard relocations due to imbalances in the cluster. 
+This setting does not limit shard relocations due to **allocation filtering** or **forced awareness**.
 
