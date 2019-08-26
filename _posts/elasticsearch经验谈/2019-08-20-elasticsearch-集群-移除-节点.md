@@ -12,7 +12,7 @@ tags:
 >有时我们需要从elasticsearch集群中移除一个数据节点,那么就涉及到数据迁移<br/>
 >elasticsearch给我们提供了一个集群级别的参数来达到此目的
 
-### 实操
+### 操作流程
 #### 排除节点
 >引用原文:<br/>
 >The most common use case for cluster-level shard allocation filtering is when you want to decommission a node. To move shards off of a node prior to shutting it down, you could create a filter that excludes the node by its IP address:
