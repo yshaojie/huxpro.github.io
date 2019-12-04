@@ -10,6 +10,11 @@ tags:
 ---
 >该配置是用作存储型elasticsearch(例如:日志存储查询)集群
 
+#### 硬盘
+* 两块盘做raid0
+    >ps: 至于几块盘做raid0根据自己实际情况
+* 单elasticsearch挂多块盘
+
 #### /etc/security/limits.conf 
 ```bash
 cat <<EOF>>  /etc/security/limits.conf 
@@ -45,5 +50,8 @@ thread_pool.bulk.queue_size: 300
 
 #### JVM OPTIONS
 ```bash
--Djna.tmpdir=dir
+-Djna.tmpdir=${ES_TMPDIR}
+-Des.enforce.bootstrap.checks=true
+#JDK11
+-XX:+UseG1GC
 ```
