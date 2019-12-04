@@ -1,6 +1,6 @@
 ---
 layout:     post
-title:      "elasticsearch移除数据节点"
+title:      "存储型elasticsearch集群参数配置"
 date:       2019-12-04 17:03:00
 author:     "聼雨夜"
 catalog: true
@@ -22,6 +22,7 @@ rd  -  as   unlimited
 #elsaticsearch config(end)
 EOF
 ```
+
 #### /etc/sysctl.conf
 ```bash
 cat <<EOF>>  /etc/sysctl.conf
