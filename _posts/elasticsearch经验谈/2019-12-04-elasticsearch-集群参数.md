@@ -24,6 +24,7 @@ rd  -  nproc   40960
 rd  -  nofile  655350
 rd  -  fsize   unlimited
 rd  -  as   unlimited
+rd  -  memlock   unlimited
 #elsaticsearch config(end)
 EOF
 ```
