@@ -106,3 +106,9 @@ private void start() throws NodeValidationException {
 3. 启动Elasticsearch服务
 4. 创建Node实例
 5. 启动Node,至此进入org.elasticsearch.node.Node阶段
+
+#### org.elasticsearch.node.Node类
+>之前的处理都是准备工作,在Node阶段才真正意义进入服务的启动逻辑阶段
+>主要的启动逻辑都在方法org.elasticsearch.node.Node#start里面
+
+
