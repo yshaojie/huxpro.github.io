@@ -10,9 +10,9 @@ tags:
     - 搜索引擎
 ---
 #### Elasticsearch启动涉及到的入口类
->org.elasticsearch.bootstrap.Elasticsearch-></br>
-> org.elasticsearch.bootstrap.Bootstrap-></br>
->  org.elasticsearch.node.Node</br>
+>org.elasticsearch.bootstrap.Elasticsearch->
+>org.elasticsearch.bootstrap.Bootstrap->
+>org.elasticsearch.node.Node
 
 #### Elasticsearch类
 main函数在Elasticsearch里面,最终调用<strong>public final int main(String[] args, Terminal terminal) throws Exception</strong><br/>
