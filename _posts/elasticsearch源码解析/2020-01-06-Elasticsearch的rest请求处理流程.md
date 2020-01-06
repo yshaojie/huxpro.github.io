@@ -17,7 +17,7 @@ tags:
 ```java
 
 ```
-```flow js
+```flow
 st=>start: Start
 op=>operation: Your Operation
 cond=>condition: Yes or No?
