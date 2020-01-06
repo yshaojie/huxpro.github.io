@@ -10,9 +10,9 @@ tags:
     - 搜索引擎
 ---
 #### Elasticsearch启动涉及到的入口类
-org.elasticsearch.bootstrap.Elasticsearch-></br>
-org.elasticsearch.bootstrap.Bootstrap-></br>
-org.elasticsearch.node.Node</br>
+>org.elasticsearch.bootstrap.Elasticsearch-></br>
+> org.elasticsearch.bootstrap.Bootstrap-></br>
+>  org.elasticsearch.node.Node</br>
 
 #### Elasticsearch类
 main函数在Elasticsearch里面,最终调用<strong>public final int main(String[] args, Terminal terminal) throws Exception</strong><br/>
@@ -110,5 +110,11 @@ private void start() throws NodeValidationException {
 #### org.elasticsearch.node.Node类
 >之前的处理都是准备工作,在Node阶段才真正意义进入服务的启动逻辑阶段
 >主要的启动逻辑都在方法org.elasticsearch.node.Node#start里面
+##### Node#start
+```java
+pluginLifecycleComponents.forEach(LifecycleComponent::start);
+injector.getInstance(XXX.class).start();
+```
+里面最核心的就是把所有的组件启动起来,而组件的构建工作在Node的构造函数里面
 
 
