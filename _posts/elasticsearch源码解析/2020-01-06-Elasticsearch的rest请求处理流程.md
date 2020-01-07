@@ -10,12 +10,9 @@ tags:
     - 搜索引擎
 ---
 >本文章以netty为实现来讲解下elasticsearch的rest处理流程
-#### 处理Rest Request的netty Handler
-处理Elasticsearch Rest Request的业务Handler为**org.elasticsearch.http.netty4.Netty4HttpRequestHandler**
 
 #### Netty4HttpServerTransport#doStart
-rest服务启动入口,doStart方法我们看到了熟悉的netty代码<br/>
-这些代码用来初始化和启动rest服务
+rest服务启动入口,doStart方法我们看到了熟悉的netty代码,这些代码用来初始化和启动rest服务
 ```java
 protected void doStart() {
         boolean success = false;
