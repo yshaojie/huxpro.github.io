@@ -12,7 +12,7 @@ tags:
 >本文章以netty为实现来讲解下elasticsearch的rest处理流程
 
 #### 请求时序图
-![alt text](https://www.draw.io/?lightbox=1&highlight=0000ff&edit=_blank&layers=1&nav=1&title=Elasticsearch660%20Http%20Api%E5%A4%84%E7%90%86%E6%B5%81%E7%A8%8B#Uhttps%3A%2F%2Fdrive.google.com%2Fuc%3Fid%3D1NR7XncZdifRs-osoJLOMP_MGNkpGvkNa%26export%3Ddownload "调用时序图")
+![alt text]("https://raw.githubusercontent.com/yshaojie/my-images/master/Elasticsearch660%20Http%20Api%E5%A4%84%E7%90%86%E6%B5%81%E7%A8%8B-Page-1.png" "调用时序图")
 
 
 #### Netty4HttpServerTransport#doStart
