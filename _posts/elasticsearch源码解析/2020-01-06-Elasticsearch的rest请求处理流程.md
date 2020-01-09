@@ -10,6 +10,8 @@ tags:
     - 搜索引擎
 ---
 >本文章以netty为实现来讲解下elasticsearch的rest处理流程
+>Elasticsearch的rest请求业务实现类都继承自**BaseRestHandler**
+>实现抽象方法**prepareRequest(final RestRequest request, final NodeClient client)**
 
 #### 请求时序图
 <img src="https://raw.githubusercontent.com/yshaojie/my-images/master/Elasticsearch660%20Http%20Api%E5%A4%84%E7%90%86%E6%B5%81%E7%A8%8B-Page-1.png"  />
