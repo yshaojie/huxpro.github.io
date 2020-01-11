@@ -450,7 +450,57 @@ private void sendLocalRequest(long requestId, final String action, final Transpo
     * indices:data/write/bulk[s][r] 副本的写
 2. 调用RequestHandlerRegistry#processMessageReceived(request, channel)
 
+主分片的Handler**TransportReplicationAction.PrimaryOperationTransportHandler**通过调用
+**TransportReplicationAction.AsyncPrimaryAction#doRun**进入核心方法**AsyncPrimaryAction#runWithPrimaryShardReference**
+```java
+void runWithPrimaryShardReference(final PrimaryShardReference primaryShardReference) {
+    try {
+        // do something
+        //主分片在做Relocated,则结束本节点所执行的任务,将该任务转发到
+        //目标Relocated节点
+        if (primaryShardReference.isRelocated()) {
+            primaryShardReference.close(); // release shard operation lock as soon as possible
+            setPhase(replicationTask, "primary_delegation");
+            // delegate primary phase to relocation target
+            // it is safe to execute primary phase on relocation target as there are no more in-flight operations where primary
+            // phase is executed on local shard and all subsequent operations are executed on relocation target as primary phase.
+            final ShardRouting primary = primaryShardReference.routingEntry();
+            assert primary.relocating() : "indexShard is marked as relocated but routing isn't" + primary;
+            final Writeable.Reader<Response> reader = in -> {
+                Response response = TransportReplicationAction.this.newResponseInstance();
+                response.readFrom(in);
+                return response;
+            };
+            DiscoveryNode relocatingNode = clusterState.nodes().get(primary.relocatingNodeId());
+            //将请求转发到Relocated节点
+            <1>transportService.sendRequest(relocatingNode, transportPrimaryAction,
+                new ConcreteShardRequest<>(request, primary.allocationId().getRelocationId(), primaryTerm),
+                transportOptions,
+                new TransportChannelResponseHandler<Response>(logger, channel, "rerouting indexing to target primary " + primary,
+                    reader) {
+                });
+        } else {
+            setPhase(replicationTask, "primary");
+            final ActionListener<Response> listener = createResponseListener(primaryShardReference);
+            //封装一个分片操作实例,该实例最终调用TransportReplicationAction.PrimaryShardReference.perform
+            <2>createReplicatedOperation(request,
+                    ActionListener.wrap(result -> result.respond(listener), listener::onFailure),
+                    primaryShardReference)
+                    .execute();
+        }
+    } catch (Exception e) {
+        Releasables.closeWhileHandlingException(primaryShardReference); // release shard operation lock before responding to caller
+        onFailure(e);
+    }
+}
+```
+1. 该主分片正在做Relocate,需要把bulk doc任务转发到新的目标主分片上
+2. 本地执行bulk doc操作,最终调用**TransportReplicationAction.PrimaryShardReference.perform**
+    而perform做了两件主要的事情
+    * 调用**TransportShardBulkAction#shardOperationOnPrimary**执行主分片操作
+    * 调用**ReplicationOperation#performOnReplicas**执行副本请求
+
 
 #### 待解
 * ClusterBlockException
-* Index Phase 
+* Index Phase
