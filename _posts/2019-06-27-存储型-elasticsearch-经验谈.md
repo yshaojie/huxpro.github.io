@@ -116,3 +116,104 @@ index.translog.durability=async
 
 该值主要用于集群中一个节点脱离集群(节点挂了),然后重启,开始恢复它自己的副本
 如果节点启动太慢,可以适当的增大`index.unassigned.node_left.delayed_timeout`,保证不会超过delayed_timeout时间
+
+####线上配置参考
+
+##### elasticsearch.yml
+```yaml
+network.host: "0.0.0.0"
+bootstrap.memory_lock: true
+bootstrap.system_call_filter: false
+
+discovery.zen.minimum_master_nodes: 2
+
+http.cors.enabled: true
+http.cors.allow-origin: "*"
+
+indices.memory.index_buffer_size: 20%
+indices.memory.min_index_buffer_size: 1GB
+indices.memory.max_index_buffer_size: 3GB
+
+thread_pool.index.queue_size: 300
+thread_pool.bulk.queue_size: 300
+
+xpack.watcher.enabled: true
+xpack.monitoring.collection.enabled: true
+xpack.ml.enabled: false
+xpack.security.enabled: false
+        
+node.master: false
+node.data: false
+node.ingest: true
+node.ml: false
+cluster.remote.connect: true
+
+# 这对于一台宿主机部署多节点时非常有用
+node.processors: 2
+```
+
+##### cluster级别动态设置
+```yaml
+#禁止通过通配符批量删除索引
+"action.destructive_requires_name" : "true",
+"cluster.info.update.interval" : "1m",
+#单个索引层面尽量达到节点间平衡
+"cluster.routing.allocation.balance.index" : "1.0f",
+#集群层面，shard数量不关注平衡
+"cluster.routing.allocation.balance.shard" : "0f",
+#控制进行rebalance时，同时进行rebalance的shard数，这对数据迁移时非常有用
+"cluster.routing.allocation.cluster_concurrent_rebalance" : "4",
+#创建索引时，达到向节点创建分片对磁盘最低要求，这可以有效的防止集群节点磁盘写满导致的节点异常
+"cluster.routing.allocation.disk.watermark.flood_stage" : "500gb",
+"cluster.routing.allocation.disk.watermark.high" : "1000gb",
+"cluster.routing.allocation.disk.watermark.low" : "1000gb",
+"cluster.routing.allocation.enable" : "all",
+#节点恢复时，恢复并发的shard数量
+"cluster.routing.allocation.node_concurrent_recoveries" : "2",
+#对单机多节点很有用，保证某一shard和副本不会存在一台机器
+#因为如果存在一台机器，那么当该机器宕机，则分片数据就会丢失
+"cluster.routing.allocation.same_shard.host" : "true",
+"indices.breaker.fielddata.limit" : "40%",
+#节点恢复数据时，每秒处理的数据量
+"indices.recovery.max_bytes_per_sec" : "60mb"
+#禁止进行节点间shard数量的rebalance
+"cluster.routing.rebalance.enable" : "none",
+```
+
+##### 索引层面的settings配置
+```json
+{
+      "index" : {
+        "lifecycle" : {
+          "name" : "TwoMonthsPolicy"
+        },
+        "codec" : "best_compression",
+        "search" : {
+          "slowlog" : {
+            "threshold" : {
+              "fetch" : {
+                "warn" : "1s"
+              },
+              "query" : {
+                "warn" : "10s"
+              }
+            }
+          }
+        },
+        "refresh_interval" : "30s",
+        "number_of_shards" : "10",
+        "translog" : {
+          "sync_interval" : "30s",
+          "durability" : "async"
+        },
+        "max_rescore_window" : "500",
+        "merge" : {
+          "scheduler" : {
+            "max_thread_count" : "1"
+          }
+        },
+        "max_result_window" : "500",
+        "number_of_replicas" : "1"
+      }
+    }
+```
