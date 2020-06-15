@@ -67,6 +67,10 @@ index.translog.sync_interval=30s
 index.translog.durability=async
 ```
 
+#### 节点磁盘
+* 用两块盘做RAID0，如果不担心数据丢失导致的恢复问题，可以采用>2块盘进行RAID0，盘越多，读写性能越高
+* 单个elasticsearch挂载多个RAID0磁盘
+
 #### Shard allocation settings
 ##### cluster.routing.allocation.same_shard.host
 * false(default) - 不进行分片在同一机器上检查
