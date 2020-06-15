@@ -9,6 +9,64 @@ tags:
     - ELK
     - 搜索引擎
 ---
+#### Index segment
+> indexing buffer 和 index.refresh_interval使得产生segment的间隔变大，从而增加了索引速度
+
+##### indexing buffer
+该配置在es启动配置文件elasticsearch.yml里面设置
+```text
+The indexing buffer is used to store newly indexed documents. When it fills up, the documents in the buffer are written to a segment on disk. It is divided between all shards on the node.
+
+The following settings are static and must be configured on every data node in the cluster:
+
+indices.memory.index_buffer_size
+Accepts either a percentage or a byte size value. It defaults to 10%, meaning that 10% of the total heap allocated to a node will be used as the indexing buffer size shared across all shards.
+indices.memory.min_index_buffer_size
+If the index_buffer_size is specified as a percentage, then this setting can be used to specify an absolute minimum. Defaults to 48mb.
+indices.memory.max_index_buffer_size
+If the index_buffer_size is specified as a percentage, then this setting can be used to specify an absolute maximum. Defaults to unbounded.
+```
+```text
+If your node is doing only heavy indexing, be sure indices.memory.index_buffer_size is large enough to give at most 512 MB indexing buffer per shard doing heavy indexing (beyond that indexing performance does not typically improve). Elasticsearch takes that setting (a percentage of the java heap or an absolute byte-size), and uses it as a shared buffer across all active shards. Very active shards will naturally use this buffer more than shards that are performing lightweight indexing.
+The default is 10% which is often plenty: for example, if you give the JVM 10GB of memory, it will give 1GB to the index buffer, which is enough to host two shards that are heavily indexing.
+```
+
+##### index.refresh_interval
+该配置在index的settings配置配置项里动态设置
+```text
+How often to perform a refresh operation, which makes recent changes to the index visible to search. Defaults to 1s
+```
+增加该配置可以减少segment的产生，但是新数据可索引也相应的增加
+
+##### 建议值
+* elasticsearch.yml
+```yaml
+indices.memory.index_buffer_size=20%
+indices.memory.min_index_buffer_size=1GB
+indices.memory.max_index_buffer_size=3GB
+```
+* index 级别设置
+```yaml
+index.refresh_interval=15s
+```
+
+#### Translog
+Translog是为了应对elasticsearch节点宕机，索引恢复用的
+
+##### index.translog.sync_interval
+多长时间执行一次translog同步到磁盘一次，这个当**index.translog.durability=async**有用
+
+##### index.translog.durability
+持久translog到磁盘的方式，默认为**request**,表示每执行一次索引操作便执行translog写磁盘，
+**async**表示异步执行translog落盘操作，不过这样会导致没有落盘的translog丢失，最终导致数据的丢失。
+
+##### 建议值
+* index级别设置
+```yaml
+index.translog.sync_interval=30s
+index.translog.durability=async
+```
+
 #### Shard allocation settings
 ##### cluster.routing.allocation.same_shard.host
 * false(default) - 不进行分片在同一机器上检查
