@@ -117,6 +117,10 @@ index.translog.durability=async
 该值主要用于集群中一个节点脱离集群(节点挂了),然后重启,开始恢复它自己的副本
 如果节点启动太慢,可以适当的增大`index.unassigned.node_left.delayed_timeout`,保证不会超过delayed_timeout时间
 
+#### 官方推荐
+[调优磁盘](https://www.elastic.co/guide/en/elasticsearch/reference/6.6/tune-for-disk-usage.html)
+[调优索引速度](https://www.elastic.co/guide/en/elasticsearch/reference/6.6/tune-for-indexing-speed.html)
+
 ####线上配置参考
 
 ##### elasticsearch.yml
