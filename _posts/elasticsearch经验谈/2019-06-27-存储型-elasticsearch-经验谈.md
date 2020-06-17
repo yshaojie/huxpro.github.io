@@ -125,7 +125,7 @@ index.translog.durability=async
 [调优磁盘](https://www.elastic.co/guide/en/elasticsearch/reference/6.6/tune-for-disk-usage.html)
 [调优索引速度](https://www.elastic.co/guide/en/elasticsearch/reference/6.6/tune-for-indexing-speed.html)
 
-####线上配置参考
+#### 线上配置参考
 
 ##### elasticsearch.yml
 ```yaml
