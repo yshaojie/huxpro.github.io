@@ -23,7 +23,28 @@ buffer是针对磁盘的缓冲
 cache是针对文件的缓存
 需要说明的是,我们程序一般都是通过文件来进行读写,所以大多时候我们关注cache即可,通过命令 free -w即可
 区分出buffer和cache具体占用内存多少
+
 #### cache对文件读写的影响
+通过命令**echo 3 > /proc/sys/vm/drop_caches**可以清除buffer/cache
+##### 写文件对buffer/cache的影响
+写入一个1GB的文件
+写入前
+```text
+root@Think:~# free -mw
+              total        used        free      shared     buffers       cache   available
+Mem:          13937       10447        1890         793          17        1582        2422
+Swap:          2047         340        1707
+root@Think:~# 
+```
+写入后
+```text
+root@Think:~# free -mw
+              total        used        free      shared     buffers       cache   available
+Mem:          13937       10472         750         792          28        2687        2385
+Swap:          2047         340        1707
+root@Think:~# 
+```
+这里我们可以看出,普通文件的可以也用到了cache,会把新写入的文件缓存起来
 
 ##### SO_KEEPALIVE
 
