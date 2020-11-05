@@ -20,7 +20,7 @@ Swap:          2047           0        2047
 ```
 图中显示当前系统的buffer/cache一共占用3869Mb
 那buffer和cache到底代表什么含义,我们可以通过man free来查看他们的说明
-```shell script
+```text
 buffers
       Memory used by kernel buffers (Buffers in /proc/meminfo)
 
@@ -37,11 +37,11 @@ Buffers %lu
 Cached %lu
      In-memory cache for files read from the disk (the page cache).  Doesn't include SwapCached.
 ```
-从proc我们可以看出buffer和cache的具体定义了
-buffer是针对磁盘的缓冲
-cache是针对文件的缓存
-需要说明的是,我们程序一般都是通过文件来进行读写,所以大多时候我们关注cache即可,通过命令 **free -w**即可
-区分出buffer和cache具体占用内存多少
+从proc我们可以看出buffer和cache的具体定义了<br/>
+*buffer是针对磁盘的缓冲
+*cache是针对文件的缓存
+需要说明的是,我们程序一般都是通过文件来进行读写,所以大多时候我们关注cache即可,<br/>
+通过命令 **free -w**即可区分出buffer和cache具体占用内存多少
 
 #### cache对文件读写的影响
 通过命令**echo 3 > /proc/sys/vm/drop_caches**可以清除buffer/cache
