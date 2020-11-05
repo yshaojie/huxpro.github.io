@@ -38,8 +38,10 @@ Cached %lu
      In-memory cache for files read from the disk (the page cache).  Doesn't include SwapCached.
 ```
 从proc我们可以看出buffer和cache的具体定义了<br/>
+
 * **buffer是针对磁盘的缓冲**
 * **cache是针对文件的缓存**
+
 需要说明的是,我们程序一般都是通过文件来进行读写,所以大多时候我们关注cache即可,<br/>
 通过命令 **free -w**即可区分出buffer和cache具体占用内存多少
 
