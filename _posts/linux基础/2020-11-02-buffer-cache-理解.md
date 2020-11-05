@@ -1,7 +1,7 @@
 ---
 layout:     post
 title:      "buffer cache理解"
-date:       2019-03-22 12:00:00
+date:       2020-11-02 12:00:00
 author:     "聼雨夜"
 catalog: true
 tags:
