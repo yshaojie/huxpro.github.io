@@ -12,7 +12,7 @@ tags:
 ---
 #### buffer/cache概念
 通过free命令可以查看系统的buffer/cache占用情况,如下
-```shell script
+```text
 root@Think:~# free -m
               total        used        free      shared  buff/cache   available
 Mem:          13937        6071        3996         429        3869        7117
