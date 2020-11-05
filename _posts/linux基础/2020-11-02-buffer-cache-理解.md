@@ -29,7 +29,7 @@ cache  Memory used by the page cache and slabs (Cached and SReclaimable in /proc
 buff/cache
       Sum of buffers and cache
 ```
-从文档的描述来看,buffer和cache的真实来源是在/proc/meminfo里面,那么继续深入来看,执行 man proc
+从文档的描述来看,buffer和cache的真实来源是在/proc/meminfo里面,那么继续深入来看,执行 **man proc**
 ```text
 Buffers %lu
      Relatively temporary storage for raw disk blocks that shouldn't get tremendously large (20MB or so).
