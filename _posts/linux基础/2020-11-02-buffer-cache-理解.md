@@ -130,17 +130,17 @@ Swap:          2047           0        2047
 从这里我们看出<br/>
 1. 执行了**echo 3 > /proc/sys/vm/drop_caches**之后再次读文件,磁盘的r/s明显读的磁盘,当文件读取完毕,r/s又降了下去,
     说明本次读的是磁盘
-2. 通过读取前后**free -m **的对比,cache明显增大1G+,说明 我们本次读取文件,把文件内容也缓存了起来
+2. 通过读取前后**free -m**的对比,cache明显增大1G+,说明 我们本次读取文件,把文件内容也缓存了起来
 
 结论:
-1. 程序对磁盘的读写都会将文件内容进行cache
-2. 读的时候优先读cache内容然后再读磁盘
+1. **程序对磁盘的读写都会将文件内容进行cache**
+2. **读的时候优先读cache内容然后再读磁盘**
 
 #### buffer/cache的大小
 > 接下来我们测试系统参数对buffer/cache的影响
 
 不做任何调整的情况下,进行6次1GB内容的写入
-```shell script
+```text
 #写之前
 root@Think:~# free -m
               total        used        free      shared  buff/cache   available
@@ -173,19 +173,24 @@ Mem:          13937        7063        3235         391        3639        6186
 Swap:          2047           0        2047
 
 ```
-从结果看,第三次写入后buffer/cache就没再增长,而此时我的内存还存在3GB+,说明buffer/cache不会无限的吃内存.
+从结果看,第三次写入后buffer/cache就没再增长,而此时我的内存还存在3GB+<br/>
+说明buffer/cache不会无限的吃内存.<br/>
 通过查看网络资料,跟buffer/cache相关的配置如下
+* vm.vfs_cache_pressure
 ```text
-vm.vfs_cache_pressure
 This option controls the tendency of the kernel to reclaim 
 the memory which is used for caching of directory and inode objects.
 At the default value of vfs_cache_pressure=100 the kernel will attempt to reclaim dentries and 
 inodes at a "fair" rate with respect to pagecache and swapcache reclaim. Decreasing vfs_cache_pressure 
-causes the kernel to prefer to retain dentry and inode caches. When vfs_cache_pressure=0, the kernel will never reclaim dentries and inodes due to memory pressure and this can easily lead to out-of-memory conditions. 
+causes the kernel to prefer to retain dentry and inode caches. When vfs_cache_pressure=0, 
+the kernel will never reclaim dentries and inodes due to memory pressure and this can easily lead to out-of-memory conditions. 
 Increasing vfs_cache_pressure beyond 100 causes the kernel to prefer to reclaim dentries and inodes.
-vm.vfs_cache_pressure来控制回收buffer/cache的程度
-
 ```
+**vm.vfs_cache_pressure来控制回收buffer/cache的程度,默认100,越大越利于buffer/cache的回收,
+坏处就是磁盘不能够充分的利用内存来提高性能**
+
+* cgroups
+还没研究过
 
 ##### SO_KEEPALIVE
 
