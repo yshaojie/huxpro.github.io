@@ -190,12 +190,11 @@ Increasing vfs_cache_pressure beyond 100 causes the kernel to prefer to reclaim 
 坏处就是磁盘不能够充分的利用内存来提高性能**
 
 * cgroups
-还没研究过
+东西比较多,还没研究过
 
-##### SO_KEEPALIVE
+##### 参考
 
-- 参考 [TCP持久连接](https://en.wikipedia.org/wiki/Keepalive#TCP_keepalive "TCP持久连接")
 
-##### SO_TIMEOUT
+- [https://tldp.org/LDP/sag/html/buffer-cache.html](https://tldp.org/LDP/sag/html/buffer-cache.html)
+- [https://tldp.org/LDP/sag/html/buffer-cache.html](https://www.kernel.org/doc/Documentation/sysctl/vm.txt )
 
-- 参考[socket time out 理解](https://cloud.tencent.com/developer/article/1039881 "socket time out 理解")
