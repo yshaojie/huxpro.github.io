@@ -198,7 +198,7 @@ Increasing vfs_cache_pressure beyond 100 causes the kernel to prefer to reclaim 
   操作系统本身还是以应用使用内存为优先的,当系统内存比较吃紧的时候,buffer/cache可用的空间就较少.
 * buffer/cache不会无限吃掉内存,当buffer/cache达到上限时,新的磁盘读写时,操作系统会清除没有正在使用的cache,
   从而让新的读写内容进入cache.
-* 对于小文件(buffer/cache上限以下)读写可以提高读写的性能
+* 对于小文件(buffer/cache上限以下)可以提高读写的性能
 * 由于buffer/cache的大小不确定性,所以这点对磁盘性能来说存在很多变数
 * 如果想重复利用buffer/cache,就要确保操作系统有足够多的空闲内存
 
