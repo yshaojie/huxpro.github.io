@@ -45,6 +45,7 @@ cache是针对文件的缓存
 
 #### cache对文件读写的影响
 通过命令**echo 3 > /proc/sys/vm/drop_caches**可以清除buffer/cache
+
 ##### 写文件对buffer/cache的影响
 写入一个1GB的文件
 写入前
