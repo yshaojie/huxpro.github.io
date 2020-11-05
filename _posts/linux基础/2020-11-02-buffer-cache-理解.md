@@ -48,7 +48,7 @@ Cached %lu
 
 ##### buffer/cache对写文件的影响
 写入一个1GB的文件<br/>
-写入前<
+写入前
 ```text
 root@Think:~# free -mw
               total        used        free      shared     buffers       cache   available
@@ -186,7 +186,7 @@ causes the kernel to prefer to retain dentry and inode caches. When vfs_cache_pr
 the kernel will never reclaim dentries and inodes due to memory pressure and this can easily lead to out-of-memory conditions. 
 Increasing vfs_cache_pressure beyond 100 causes the kernel to prefer to reclaim dentries and inodes.
 ```
-**vm.vfs_cache_pressure来控制回收buffer/cache的程度,默认100,越大越利于buffer/cache的回收,
+**vm.vfs_cache_pressure来控制回收buffer/cache的趋势,默认100,越大越利于buffer/cache的回收,
 坏处就是磁盘不能够充分的利用内存来提高性能**
 
 * cgroups
