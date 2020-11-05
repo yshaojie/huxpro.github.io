@@ -200,7 +200,7 @@ Increasing vfs_cache_pressure beyond 100 causes the kernel to prefer to reclaim 
   从而让新的读写内容进入cache.
 * 对于小文件(buffer/cache上限以下)可以提高读写的性能
 * 由于buffer/cache的大小不确定性,所以这点对磁盘性能来说存在很多变数
-* 如果想重复利用buffer/cache,就要确保操作系统有足够多的空闲内存
+* 如果想充分利用buffer/cache,就要确保操作系统有足够多的空闲内存
 
 #### 参考
 - <https://tldp.org/LDP/sag/html/buffer-cache.html>
