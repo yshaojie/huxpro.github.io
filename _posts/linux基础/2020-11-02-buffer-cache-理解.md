@@ -46,9 +46,9 @@ Cached %lu
 #### cache对文件读写的影响
 通过命令**echo 3 > /proc/sys/vm/drop_caches**可以清除buffer/cache
 
-##### 写文件对buffer/cache的影响
-写入一个1GB的文件
-写入前
+##### buffer/cache对写文件的影响
+写入一个1GB的文件<br/>
+写入前<br/>
 ```text
 root@Think:~# free -mw
               total        used        free      shared     buffers       cache   available
@@ -56,7 +56,7 @@ Mem:          13937       10447        1890         793          17        1582 
 Swap:          2047         340        1707
 root@Think:~# 
 ```
-写入后
+写入后<br/>
 ```text
 root@Think:~# free -mw
               total        used        free      shared     buffers       cache   available
@@ -64,8 +64,10 @@ Mem:          13937       10472         750         792          28        2687 
 Swap:          2047         340        1707
 root@Think:~# 
 ```
-这里我们可以看出,普通文件的写也用到了cache,会把新写入的文件缓存起来
-写入后直接开始读写入的文件
+这里我们可以看出,普通文件的写也用到了cache,会把新写入的文件缓存起来<br/>
+
+##### buffer/cache对读文件的影响
+紧接上边写文件后,直接开始读写入的文件<br/>
 ```shell script
 #iostat -x nvme0n1 -k -d 3部分打印结果
 Device            r/s     w/s     rkB/s     wkB/s   rrqm/s   wrqm/s  %rrqm  %wrqm r_await w_await aqu-sz rareq-sz wareq-sz  svctm  %util
@@ -86,10 +88,9 @@ nvme0n1          0.00    1.00      0.00     13.33     0.00     2.33   0.00  70.0
 Device            r/s     w/s     rkB/s     wkB/s   rrqm/s   wrqm/s  %rrqm  %wrqm r_await w_await aqu-sz rareq-sz wareq-sz  svctm  %util
 nvme0n1          1.00    6.33     44.00    448.00    10.00    19.67  90.91  75.64    2.67    0.79   0.00    44.00    70.74   1.82   1.33
 ```
-从r/s列我们可以看出,磁盘读的qps很低,说明本次读我们并没有直接读磁盘,而是读取的cache里面数据
-清除cache后继续再读
-执行命令**echo 3 > /proc/sys/vm/drop_caches**
-清除后的buffer/cache
+从r/s列我们可以看出,磁盘读的qps很低,说明本次读我们并没有直接读磁盘,而是读取的cache里面数据<br/>
+清除cache后继续再读,执行命令**echo 3 > /proc/sys/vm/drop_caches**<br/>
+清除后的buffer/cache<br/>
 ```shell script
 root@Think:~# free -m
               total        used        free      shared  buff/cache   available
@@ -126,7 +127,7 @@ root@Think:~# free -m
 Mem:          13937        6525        4674         534        2738        6611
 Swap:          2047           0        2047
 ```
-从这里我们看出
+从这里我们看出<br/>
 1. 执行了**echo 3 > /proc/sys/vm/drop_caches**之后再次读文件,磁盘的r/s明显读的磁盘,当文件读取完毕,r/s又降了下去,
     说明本次读的是磁盘
 2. 通过读取前后**free -m **的对比,cache明显增大1G+,说明我们本次读取文件,把文件内容也缓存了起来
