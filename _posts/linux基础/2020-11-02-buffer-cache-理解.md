@@ -48,7 +48,7 @@ Cached %lu
 
 ##### buffer/cache对写文件的影响
 写入一个1GB的文件<br/>
-写入前<br/>
+写入前<
 ```text
 root@Think:~# free -mw
               total        used        free      shared     buffers       cache   available
@@ -56,7 +56,7 @@ Mem:          13937       10447        1890         793          17        1582 
 Swap:          2047         340        1707
 root@Think:~# 
 ```
-写入后<br/>
+写入后
 ```text
 root@Think:~# free -mw
               total        used        free      shared     buffers       cache   available
@@ -68,7 +68,7 @@ root@Think:~#
 
 ##### buffer/cache对读文件的影响
 紧接上边写文件后,直接开始读写入的文件<br/>
-```shell script
+```text
 #iostat -x nvme0n1 -k -d 3部分打印结果
 Device            r/s     w/s     rkB/s     wkB/s   rrqm/s   wrqm/s  %rrqm  %wrqm r_await w_await aqu-sz rareq-sz wareq-sz  svctm  %util
 nvme0n1          1.00    0.33     44.00      1.33     0.00     0.00   0.00   0.00    1.33    1.00   0.00    44.00     4.00   3.00   0.40
@@ -91,14 +91,14 @@ nvme0n1          1.00    6.33     44.00    448.00    10.00    19.67  90.91  75.6
 从r/s列我们可以看出,磁盘读的qps很低,说明本次读我们并没有直接读磁盘,而是读取的cache里面数据<br/>
 清除cache后继续再读,执行命令**echo 3 > /proc/sys/vm/drop_caches**<br/>
 清除后的buffer/cache<br/>
-```shell script
+```text
 root@Think:~# free -m
               total        used        free      shared  buff/cache   available
 Mem:          13937        6421        5948         510        1568        6739
 Swap:          2047           0        2047
 ```
 
-```shell script
+```text
 #iostat -x nvme0n1 -k -d 3部分打印结果
 Device            r/s     w/s     rkB/s     wkB/s   rrqm/s   wrqm/s  %rrqm  %wrqm r_await w_await aqu-sz rareq-sz wareq-sz  svctm  %util
 nvme0n1        162.33    8.33  20696.00     64.00     0.00     1.33   0.00  13.79    0.09    0.08   0.00   127.49     7.68   3.85  65.73
@@ -130,7 +130,7 @@ Swap:          2047           0        2047
 从这里我们看出<br/>
 1. 执行了**echo 3 > /proc/sys/vm/drop_caches**之后再次读文件,磁盘的r/s明显读的磁盘,当文件读取完毕,r/s又降了下去,
     说明本次读的是磁盘
-2. 通过读取前后**free -m **的对比,cache明显增大1G+,说明我们本次读取文件,把文件内容也缓存了起来
+2. 通过读取前后**free -m **的对比,cache明显增大1G+,说明 我们本次读取文件,把文件内容也缓存了起来
 
 结论:
 1. 程序对磁盘的读写都会将文件内容进行cache
